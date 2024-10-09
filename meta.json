@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "type": "data_connector",
+  "extraData": {
+    "disabledPeriodicSync": false,
+    "dataSourceConfigUiUri": "https://81b3dce2-62b1-4c60-a54f-b330b2aba1c1-00-137jlbvv0nii2.picard.replit.dev"
+  },
+  "protocol": {
+    "type": "http",
+    "httpProtocol": {
+      "uris": [
+        {
+          "type": "tableMeta",
+          "uri": "/api/table_meta"
+        },
+        {
+          "type": "records",
+          "uri": "/api/records"
+        }
+      ]
+    }
+  }
+}
