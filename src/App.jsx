@@ -42,28 +42,37 @@ export default function App() {
       user_id: userId,
       tenant_key: tenantKey,
     };
-    console.log(formData);
-    // try {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", // Đúng header JSON
-      },
-      body: JSON.stringify(formData),
-    });
 
-    const result = await response.json();
+    const timestamp = Date.now().toString();
+    const nonce = Math.random().toString(36).substring(2); // Generate random nonce
 
-    if (result.status === "error") {
-      setErrorMessage(result.message);
-    } else if (result.status === "success") {
-      setSuccessMessage("Success! Operation completed.");
+    const str = timestamp + nonce + secretKey + JSON.stringify(formData);
+    const sha1 = crypto.createHash("sha1").update(str).digest("hex");
+
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-base-request-nonce": nonce,
+          "x-base-request-timestamp": timestamp,
+          "x-base-signature": sha1,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (result.status === "error") {
+        setErrorMessage(result.message);
+      } else if (result.status === "success") {
+        setSuccessMessage("Success! Operation completed.");
+      }
+    } catch (error) {
+      setErrorMessage("An unexpected error occurred.");
+    } finally {
+      setLoading(false);
     }
-    // } catch (error) {
-    //   setErrorMessage("An unexpected error occurred.");
-    // } finally {
-    //   setLoading(false);
-    // }
   };
 
   return (

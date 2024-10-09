@@ -10,9 +10,9 @@ channel = "stable-24_05"
 language = "nodejs"
 
 [deployment]
-deploymentTarget = "static"
+deploymentTarget = "gce"
 build = ["npm", "run", "build"]
-publicDir = "dist"
+run = ["sh", "-c", "npx serve dist"]
 
 [[ports]]
 localPort = 5173
