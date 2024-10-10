@@ -43,20 +43,11 @@ export default function App() {
       tenant_key: tenantKey,
     };
 
-    const timestamp = Date.now().toString();
-    const nonce = Math.random().toString(36).substring(2); // Generate random nonce
-
-    const str = timestamp + nonce + secretKey + JSON.stringify(formData);
-    const sha1 = crypto.createHash("sha1").update(str).digest("hex");
-
     try {
       const response = await fetch(API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-base-request-nonce": nonce,
-          "x-base-request-timestamp": timestamp,
-          "x-base-signature": sha1,
         },
         body: JSON.stringify(formData),
       });
@@ -166,31 +157,4 @@ export default function App() {
       </form>
     </div>
   );
-
-  // return (
-  //   <div>
-  //     <div>userId: {userId}</div>
-  //     <div>tenantKey: {tenantKey}</div>
-  //     <input
-  //       value={value}
-  //       onChange={(e) => {
-  //         setValue(e.target.value);
-  //       }}
-  //     />
-  //     {/* <button
-  //       onClick={() => {
-  //         makeSignedRequest(); // Gọi hàm gửi request có chữ ký khi nhấn nút
-  //       }}
-  //     >
-  //       Send Request with Signature
-  //     </button> */}
-  //     <button
-  //       onClick={() => {
-  //         bitable.saveConfigAndGoNext({ value });
-  //       }}
-  //     >
-  //       Next
-  //     </button>
-  //   </div>
-  // );
 }
